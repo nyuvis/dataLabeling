@@ -9,11 +9,11 @@ A visual interactive data labeling system
 ### Edit the .bash_profile
 `vim  .bash_profile ` <br/>
 Add the following code into the file:<br/>
-(```)
+  ```
   export PATH="$HOME/.pyenv/bin:$PATH"
   eval "$(pyenv init -)"
   eval "$(pyenv virtualenv-init -)"
-(```)
+  ```
   
 Then run: <br/>
 `source  .bash_profile`
