@@ -2,7 +2,7 @@
 A visual interactive data labeling system
 
 # Installing Instruction
-## Setup python virtual enviroment
+## 1. Setup python virtual enviroment
 ### Install pyenv.
 `brew install pyenv'` <br/>
 
@@ -24,14 +24,20 @@ Then run: <br/>
 ### Go into the virtual enviroment
 `pyenv activate dataLabeling`
 
-## Clone the github repository:
+## 2. Clone the github repository:
 `https://github.com/basketduck/dataLabeling/` <br/>
 
-## Install python dependencies
-Change the working path to the cloned local repository, where includes `requirements.txt`. <br\>
-Run the following code: <br\>
-`pip uninstall -ry requirements.txt` <br\>
-`pip install -r requirements.txt` <br\>
+## 3. Install python dependencies
+Change the working path to the cloned local repository, where includes `requirements.txt`. <br/>
+Run the following code: <br/>
+`pip uninstall -ry requirements.txt` <br/>
+`pip install -r requirements.txt` <br/>
+
+### 4. Run the server:
+`python manage.py runserver`
+
+### 5. Open the site:
+`http://127.0.0.1:8000/engine/dotVis`
 
 
 
