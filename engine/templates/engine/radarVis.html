@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+{% load static%}
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <title>Bootstrap 101 Template</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+    
+    <!-- d3 -->
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/d3-lasso@0.0.5/build/d3-lasso.min.js"></script>
+
+    <!-- <link href="theme.css" rel="stylesheet"> -->
+    <link href="{%static 'theme.css' %}" rel="stylesheet">
+    
+    <!-- HTML5 shim 和 Respond.js 是为了让 IE8 支持 HTML5 元素和媒体查询（media queries）功能 -->
+    <!-- 警告：通过 file:// 协议（就是直接将 html 页面拖拽到浏览器中）访问页面时 Respond.js 不起作用 -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">Data Labeling</a>
+          </div>
+          <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li><a href="../engine/">Home</a></li>
+                <li><a href="../engine/datasetOverview">Dataset Explore</a></li>
+                <!-- <li><a href="#contact">Contact</a></li> -->
+                <li class="dropdown" class="active">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">VIS<span class="caret"></span></a>
+                  <ul class="dropdown-menu">
+                    <li><a href="visSel">ScatterPlot</a></li>
+                    <li><a href="classifierVis">ClassifierVis</a></li>
+                    <li class="active"><a href="radarVis">RadarVis</a></li>
+                    <li><a href="parallelVis">parallelVis</a></li>
+                    <li><a href="dotVis">dotVis</a></li>
+                    <li role="separator" class="divider"></li>
+                    <li class="dropdown-header" id = "test">Nav header</li>
+                    <li><a href="#">Separated link</a></li>
+                    <li><a href="#">One more separated link</a></li>
+                  </ul>
+                </li>
+                <li><a id = "saveToFile">Save</a></li>
+              </ul>
+          </div><!--/.nav-collapse -->
+        </div>
+    </nav>
+
+    <div class="container">
+
+        <div class="row">
+            <div class="col-md-6" id = "mainView">
+                <div class="panel panel-default" id = "scatterPlot_panel">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">ClassifierVis</h3>
+                        <!-- <button id = "refreshVis">Refresh</button> -->
+                    </div>
+                    <div class="panel-body" id="scatterPlot">
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                      <h3 class="panel-title">Review Content</h3>
+                    </div>
+                    <div class="panel-body" id='text_being_labeled'>
+                      Panel content
+                    </div>
+                </div>
+                <!-- <p id='text_being_labeled'>Text here</p> -->
+            </div>
+            <div class="col-md-2">
+                <div class="panel panel-default" id = "labelView_label">
+                    <div class="panel-heading" >
+                        <h3 class="panel-title">Label</h3>
+                    </div>
+                    <div class="panel-body" id= " text_being_labeled">
+                        <div class="row">
+                            <div class="col-md-3"></div>
+                            <div class="col-md-9">
+                            <!-- "Hotels", "Restaurants", "Beauty & Spas", "Real Estate", "Airports", "Pets", "Doctors", "Auto Repair", "Lawyers" -->
+                            <label class="radio">
+                                <input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="Hotels"> Hotels
+                            </label>
+                            <label class="radio">
+                                <input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="Restaurants"> Restaurants
+                            </label>
+                            <label class="radio">
+                                <input type="radio" name="inlineRadioOptions" id="inlineRadio3" value="Beauty & Spas"> Beauty & Spas
+                            </label>
+                            <label class="radio">
+                                <input type="radio" name="inlineRadioOptions" id="inlineRadio4" value="Real Estate"> Real Estate
+                            </label>
+                            <label class="radio">
+                                <input type="radio" name="inlineRadioOptions" id="inlineRadio5" value="Airports"> Airports
+                            </label>
+                            <label class="radio">
+                                <input type="radio" name="inlineRadioOptions" id="inlineRadio6" value="Pets"> Pets
+                            </label>
+                            <label class="radio">
+                                <input type="radio" name="inlineRadioOptions" id="inlineRadio7" value="Doctors"> Doctors
+                            </label>
+                            <label class="radio">
+                                <input type="radio" name="inlineRadioOptions" id="inlineRadio8" value="Auto Repair"> Auto Repair
+                            </label>
+                            <label class="radio">
+                                <input type="radio" name="inlineRadioOptions" id="inlineRadio8" value="Lawyers"> Lawyers
+                            </label>
+                            <!-- <button type="button" class="btn btn-sm btn-default" id = "next_doc_button">Next</button> -->
+                            <button type="button" class="btn btn-sm btn-default" id = "label_doc_button">label it</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row" id = "labelView_text">
+        </div>
+
+    </div>
+
+    <!-- jQuery (Bootstrap 的所有 JavaScript 插件都依赖 jQuery，所以必须放在前边) -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+    <!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript">
+        var categiories = ["Hotels", "Restaurants", "Beauty & Spas", "Real Estate", "Airports", "Pets", "Doctors", "Auto Repair", "Lawyers"]
+        var data_dict= {{data_dict | safe}}
+        var unlabeledSet = {{unlabeledSet | safe}}
+        var ranked_unlabledSet_id = JSON.parse('{{ranked_unlabledSet_id | safe}}')
+
+        var indexOfSelectedDoc = 0
+
+        var data_list = []
+        for (var key in data_dict){
+            data_list.push(data_dict[key])
+        }
+        var unlabeledSet_list = []
+        for (var key in unlabeledSet){
+            unlabeledSet_list.push(unlabeledSet[key])
+        }
+
+
+        var zoomState = null
+        var ZoomEnable = true
+        var lassoSelectedDocs_id = []
+        var Append_mode = false
+        var zoom_k = 1
+        var zoom_x = 0
+        var zoom_y = 0
+
+
+        let radius_normal = 6
+        let radius_selected = 8
+        let width_selected = 3
+        let color_default = "#69b3a2"
+        let color_selected = "#EC888C"
+        let color_target = "red"
+        let color_before_mouseover = null
+        let radius_before_mouseover = null
+        let width_before_mouseover = null
+
+        let bb = document.querySelector('#scatterPlot')
+            .getBoundingClientRect()
+        let shape = {
+            innerwidth: bb.right - bb.left,
+            innerheight: 0
+        }
+        shape.innerheight = shape.innerwidth
+        let margin = {
+            left: 20,
+            top: 10,
+            right: 10,
+            bottom: 20
+        }
+
+
+        function renderRadarChart(){
+            $("#scatterPlot").empty();
+            let svg = d3.select('#scatterPlot')
+                .append('svg')
+                .attr("viewBox", [0, 0, shape.innerwidth, shape.innerheight])
+            var angle = d3.scaleOrdinal()
+                .domain(["Hotels", "Restaurants", "Beauty & Spas", "Real Estate", "Airports", "Pets", "Doctors", "Auto Repair", "Lawyers"])
+                .range(d3.range(0, 2*Math.PI, 2/9*Math.PI))
+            var r = d3.scaleLinear()
+                .domain([0,1])
+                .range([0, shape.innerwidth/2]);
+            x = angle
+            y = r
+            
+            var clip = svg.append("defs")
+                .append("SVG:clipPath")
+                .attr("id", "clip")
+                .append("SVG:rect")
+                .attr("width", shape.innerwidth)
+                .attr("height", shape.innerheight)
+                .attr("x", 0)
+                .attr("y", 0);
+
+            var scatter = svg.append('g')
+                .attr("clip-path", "url(#clip)")
+
+            var axis = scatter.selectAll(".axis")
+                .data(d3.range(0, 360, 40))
+                .enter()
+                .append("g")
+                .attr("class", "axis")
+                .attr("transform","translate(" + (shape.innerwidth/2 + zoom_x) + "," + (shape.innerheight/2 + zoom_y) + ")")
+            axis.append("line")
+                .attr("x1", 0)
+                .attr("y1", 0)
+                .attr("x2", 0)
+                .attr("y2", zoom_k* shape.innerheight/2)
+                .attr("class", "line")
+                .style("stroke", "grey")
+                .style("stroke-width", "1px")
+                .attr("transform", function(d) {
+                    return "rotate(" + d + ")";
+                });
+            
+            line = d3.lineRadial()
+                .curve(d3.curveLinearClosed)
+            
+            radar_data = []
+            for(let i = 0; i < data_list.length; i++){
+                let v_all = data_list[i].prob
+                let vv = []
+                for(let j = 0; j < v_all.length; j++){
+                    vv.push({"prob":v_all[j], "cat": categiories[j], "index": data_list[i].index} )
+                }
+                radar_data.push(vv)
+                data_list[i]['radar_data'] = vv
+            }
+            // radar_data = data_list.map(d => d.prob.map(x, i =>[x, categiories[i]])) 
+
+            var lineRadial = d3.lineRadial()
+                .curve(d3.curveLinearClosed)
+                .angle((d) => x(d.cat))
+                .radius((d) => zoom_k * y(d.prob));
+
+            scatter.selectAll("path")
+                .data(data_list)
+                .enter()
+                .append("path")
+                .attr("id", function(d) {
+                    return "radar_" + d.index;
+                })
+                .attr("d", d => lineRadial(d.radar_data))
+                .attr("fill", "none")
+                .attr("stroke", d => assignColor(d.index, d.isLabeled))
+                .attr("stroke-opacity", 0.5)
+                .attr("transform", d => `
+                        translate(${shape.innerwidth / 2 + zoom_x},${shape.innerheight / 2 +  zoom_y}),
+                        rotate(${180})
+                    `)
+                .on("mouseover", handleMouseOver)
+                .on("mouseout", handleMouseOut)
+                .on("click", function(d) {
+                    d3.select('#radar_' + indexOfSelectedDoc).style("stroke", color_default)
+                    indexOfSelectedDoc = d.index
+                    d3.select('#text_' + indexOfSelectedDoc).style("stroke", color_target)
+                    d3.select('#text_being_labeled')
+                        .text(data_dict[d.index]['doc'])
+                });
+
+            let zoom = d3.zoom()
+                .scaleExtent([.5, 50]) // This control how much you can unzoom (x0.5) and zoom (x20)
+                .extent([
+                    [0, 0],
+                    [shape.innerwidth, shape.innerheight]
+                ])
+                .on("zoom", updateChart);
+
+            if (ZoomEnable) {
+                var zoom_area = svg.append("rect")
+                    .attr("width", shape.innerwidth)
+                    .attr("height", shape.innerheight)
+                    .style("fill", "none")
+                    .style("pointer-events", "all")
+                    // .call(zoom)
+                if (zoomState === null) {
+                    zoom_area.call(zoom)
+                } else {
+                    zoom_area.call(zoom.transform, d3.zoomIdentity.scale(zoomState.k).translate(zoomState.x / zoomState.k, zoomState.y / zoomState.k))
+                    zoom_area.call(zoom)
+                }
+            } else {
+
+            }
+
+            function handleMouseOver(d, i) {
+                // console.log(d)
+                let data_t = d
+                let id_temp = '#radar_' + d.index
+                color_before_mouseover = d3.select(id_temp).style("stroke")
+                width_before_mouseover = d3.select(id_temp).attr("stroke-width")
+                d3.select('#radar_' + d.index)
+                    .attr("stroke-width", width_selected)
+                    .style("stroke", "orange");
+
+                // scatter
+                //     .append("path")
+                //     .attr("id", id_temp)
+                //     .attr("d", d => lineRadial(d.radar_data))
+                //     .attr("fill", "none")
+                //     .attr("stroke", color_default)
+                //     .attr("stroke-opacity", 0.5)
+                //     .attr("transform", d => `
+                //             translate(${shape.innerwidth / 2 + zoom_x},${shape.innerheight / 2 +  zoom_y}),
+                //             rotate(${180})
+                //         `)
+                //     .on("mouseover", handleMouseOver)
+                //     .on("mouseout", handleMouseOut)
+                //     .on("click", function(d) {
+                //         d3.select('#radar_' + indexOfSelectedDoc).style("stroke", color_default)
+                //         indexOfSelectedDoc = d.index
+                //         d3.select('#text_' + indexOfSelectedDoc).style("stroke", color_target)
+                //         d3.select('#text_being_labeled')
+                //             .text(data_dict[d.index]['doc'])
+                //     });
+                // svg.append("text")
+                //     .text(d.index)
+                //     .attr("id", "t_" + d.index)
+                //     .attr("x", 0)
+                //     .attr("y", function() {
+                //         max_prob = d3.max(data_t.prob)
+                //         return zoom_k * y(max_prob);
+                //     })
+                //     .attr("transform", d => `
+                //         translate(${shape.innerwidth / 2 + zoom_x},${shape.innerheight / 2 +  zoom_y}),
+                //         rotate(${x(data_t.ori_cat)/Math.PI*180})
+                //     `);
+            }
+
+            function handleMouseOut(d, i) {
+                d3.select('#radar_' + d.index)
+                    .attr("stroke-width", width_before_mouseover)
+                    .style("stroke", color_before_mouseover);
+                // d3.select("#t_" + d.index).remove(); // Remove text location
+                d3.select('#radar_' + indexOfSelectedDoc).style("stroke", color_target)
+            }
+
+            function updateChart() {
+                zoom_k = d3.event.transform.k
+                zoom_x = d3.event.transform.x
+                zoom_y = d3.event.transform.y
+
+
+                // update circle position
+                scatter
+                    .selectAll("path")
+                    .attr('d', d => lineRadial(d.radar_data))
+                    .attr("transform", d => `
+                        translate(${shape.innerwidth / 2 + d3.event.transform.x},${shape.innerheight / 2 +  d3.event.transform.y}),
+                        rotate(${180})
+                    `)
+                scatter
+                    .selectAll(".axis")
+                    .attr("transform","translate(" + (shape.innerwidth/2 + zoom_x) + "," + (shape.innerheight/2 + zoom_y) + ")")
+                scatter.selectAll("line")
+                    .attr("y2", zoom_k* shape.innerheight/2)
+                // for (let i = 0; i < lassoSelectedDocs_id.length; i++) {
+                //     let id_t = "#dot_" + lassoSelectedDocs_id[i]
+                //     scatter
+                //         .select(id_t)
+                //         .style("fill", color_selected);
+                // }
+                zoomState = d3.event.transform
+            }
+
+
+            function assignColor(index, isLabeled) {
+                if (index == indexOfSelectedDoc) {
+                    return color_target
+                } else {
+                    if(isLabeled == 1){
+                        return 'grey'
+                    }else{
+                        return color_default
+                    }
+                }
+            }
+
+        }
+
+        renderRadarChart()
+       
+
+        $(document).ready(function() {
+            document.addEventListener('keydown', keyEvent);
+
+            function keyEvent(event) {
+                if (event.key == 'Control') {
+                    if (ZoomEnable) {
+                        ZoomEnable = false
+                        renderRadarChart()
+                    } else {
+                        ZoomEnable = true
+                        renderRadarChart()
+                    }
+                }
+                if (event.key == 'a') {
+                    if (Append_mode) {
+                        Append_mode = false
+                    } else {
+                        Append_mode = true
+                    }
+                }
+            }
+            $("#test").click(function() {
+                
+                var data = {
+
+                };
+                jQuery.get("{% url 'engine:outputSometing' %}", data, function(ret) {
+
+                })
+            })
+            $("#refreshVis").click(
+                renderRadarChart()
+            )
+            $("#next_doc_button").click(function() {
+                label_input = $('input:radio:checked').val()
+                var data = {
+                    "label_input": label_input,
+                    "query_instance_id": indexOfSelectedDoc
+                };
+                jQuery.get("{% url 'engine:randomSampling' %}", data, function(ret) {
+                    var next_instance = JSON.parse(ret['next_instance'])
+                    query_instance_id = JSON.parse(ret['next_instance_id'])
+                    indexOfSelectedDoc = query_instance_id 
+                    d3.select("#radar_" + indexOfSelectedDoc).style("stroke", color_target)
+                    d3.select('#text_being_labeled')
+                        .text(next_instance['doc'])
+                })
+            })
+            $("#label_doc_button").click(function() {
+                label_input = $('input:radio:checked').val()
+                var data = {
+                    "label_input": label_input,
+                    "query_instance_id": indexOfSelectedDoc
+                };
+
+                //有点问题
+                data_dict[indexOfSelectedDoc].isLabeled = 1
+                d3.select("#radar_" + indexOfSelectedDoc).style("stroke", "grey")
+                jQuery.get("{% url 'engine:labelSingleDoc' %}", data, function(ret) {
+
+                })
+            })
+            $("#saveToFile").click(function() {
+                var data = {};
+                jQuery.get("{% url 'engine:saveLabledDataToFile' %}", data, function(ret) {
+
+                })
+            })
+        })
+    </script>
+    <!-- <script src="{%static 'index.js' %}"></script> -->
+  </body>
+</html>

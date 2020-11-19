@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+{% load static%}
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <title>Bootstrap 101 Template</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+    
+    <!-- d3 -->
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/d3-lasso@0.0.5/build/d3-lasso.min.js"></script>
+
+    <!-- <link href="theme.css" rel="stylesheet"> -->
+    <link href="{%static 'theme.css' %}" rel="stylesheet">
+    
+    <!-- HTML5 shim 和 Respond.js 是为了让 IE8 支持 HTML5 元素和媒体查询（media queries）功能 -->
+    <!-- 警告：通过 file:// 协议（就是直接将 html 页面拖拽到浏览器中）访问页面时 Respond.js 不起作用 -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">Data Labeling</a>
+          </div>
+          <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li><a href="../engine/">Home</a></li>
+                <li><a href="../engine/datasetOverview">Dataset Explore</a></li>
+                <!-- <li><a href="#contact">Contact</a></li> -->
+                <li class="dropdown" class="active">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">VIS<span class="caret"></span></a>
+                  <ul class="dropdown-menu">
+                    <li><a href="../engine/visSel">ScatterPlot</a></li>
+                    <li><a href="classifierVis">ClassifierVis</a></li>
+                    <li ><a href="radarVis">RadarVis</a></li>
+                    <li><a href="parallelVis">parallelVis</a></li>
+                    <li class="active"><a href="dotVis">dotVis</a></li>
+                  </ul>
+                </li>
+                <li class="dropdown" class="active">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Rank<span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                      <li><a id="global_rank">Global</a></li>
+                      <li><a id="group_rank">Group</a></li>
+                    </ul>
+                </li>
+                <li><a id = "saveToFile">Save</a></li>
+              </ul>
+          </div><!--/.nav-collapse -->
+        </div>
+    </nav>
+
+    <div class="container">
+
+        <div class="row">
+            <div class="col-md-6" id = "mainView">
+                <div class="panel panel-default" id = "scatterPlot_panel">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">ScatterPlot</h3>
+                    </div>
+                    <div class="panel-body" id="scatterPlot"></div>\
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                      <h3 class="panel-title">Review Content</h3>
+                    </div>
+                    <div class="panel-body" id='text_being_labeled'>
+                      Panel content
+                    </div>
+                </div>
+                <!-- <p id='text_being_labeled'>Text here</p> -->
+            </div>
+            <div class="col-md-2">
+                <div class="panel panel-default" id = "labelView_label">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Label</h3>
+                    </div>
+                    <div class="panel-body" id="text_being_labeled">
+                        <div class="row">
+                            <div class="col-md-3"></div>
+                            <div class="col-md-9">
+                            <!-- "Hotels", "Restaurants", "Beauty & Spas", "Real Estate", "Airports", "Pets", "Doctors", "Auto Repair", "Lawyers" -->
+                            <label class="radio">
+                                <input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="Hotels"> Hotels
+                            </label>
+                            <label class="radio">
+                                <input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="Restaurants"> Restaurants
+                            </label>
+                            <label class="radio">
+                                <input type="radio" name="inlineRadioOptions" id="inlineRadio3" value="Beauty & Spas"> Beauty & Spas
+                            </label>
+                            <label class="radio">
+                                <input type="radio" name="inlineRadioOptions" id="inlineRadio4" value="Real Estate"> Real Estate
+                            </label>
+                            <label class="radio">
+                                <input type="radio" name="inlineRadioOptions" id="inlineRadio5" value="Airports"> Airports
+                            </label>
+                            <label class="radio">
+                                <input type="radio" name="inlineRadioOptions" id="inlineRadio6" value="Pets"> Pets
+                            </label>
+                            <label class="radio">
+                                <input type="radio" name="inlineRadioOptions" id="inlineRadio7" value="Doctors"> Doctors
+                            </label>
+                            <label class="radio">
+                                <input type="radio" name="inlineRadioOptions" id="inlineRadio8" value="Auto Repair"> Auto Repair
+                            </label>
+                            <label class="radio">
+                                <input type="radio" name="inlineRadioOptions" id="inlineRadio8" value="Lawyers"> Lawyers
+                            </label>
+                            <!-- <button type="button" class="btn btn-sm btn-default" id = "next_doc_button">Next</button> -->
+                            <button type="button" class="btn btn-sm btn-default" id = "label_doc_button">label it</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row" id = "labelView_text">
+
+            </div>
+        </div>
+
+    </div>
+
+    <!-- jQuery (Bootstrap 的所有 JavaScript 插件都依赖 jQuery，所以必须放在前边) -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+    <!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript">
+        var data_dict= {{data_dict | safe}}
+        var unlabeledSet = {{unlabeledSet | safe}}
+        var labeledSet = {{labeledSet | safe}}
+        var prob_Class = {{prob_Class | safe}}
+
+        //Init value by group
+        var uncertaintyByGroup = {}
+        var uncertaintyAll = []
+        for (let i=0; i < prob_Class.length; i++) {
+            uncertaintyByGroup[prob_Class[i]] = []
+        }
+        // console.log(data_dict)
+
+        var indexOfSelectedDoc = 0
+
+        var data_list = []
+        for (var key in data_dict){
+            data_list.push(data_dict[key])
+            if (data_dict[key]['isLabeled'] == 1){
+                // uncertaintyByGroup[data_dict[key]['predicted_cat']][key] = data_dict[key]['entropy']
+                uncertaintyByGroup[data_dict[key]['predicted_cat']].push({'id': key, 'entropy': data_dict[key]['entropy']})
+                uncertaintyAll.push({'id': key, 'entropy': data_dict[key]['entropy']})
+            }else{
+                // uncertaintyByGroup[unlabeledSet[key]['predicted_cat']][key] = data_dict[key]['entropy']
+                uncertaintyByGroup[unlabeledSet[key]['predicted_cat']].push({'id': key, 'entropy': data_dict[key]['entropy']})
+                uncertaintyAll.push({'id': key, 'entropy': data_dict[key]['entropy']})
+                data_dict[key]['predicted_cat'] = unlabeledSet[key]['predicted_cat']
+            }
+            // if (uncertaintyByGroup[data_dict[key]['predicted_cat']]) {
+                
+            // }else{
+            //     console.log(data_dict[key]['predicted_cat'])
+            // }
+        }
+        var unlabeledSet_list = []
+        for (var key in unlabeledSet){
+            unlabeledSet_list.push(unlabeledSet[key])
+        }
+
+        var sortBy = function (filed, rev, primer) {
+            rev = (rev) ? -1 : 1;
+            return function (a, b) {
+                a = a[filed];
+                b = b[filed];
+                if (typeof (primer) != 'undefined') {
+                    a = primer(a);
+                    b = primer(b);
+                }
+                // Large to small
+                if (a < b) { return rev * 1; }
+                if (a > b) { return rev * -1; }
+                //small to large
+                // if (a < b) { return rev * -1; }
+                // if (a > b) { return rev * 1; }
+                return 1;
+            }
+        };
+        for (var t in uncertaintyByGroup) {
+            let list = uncertaintyByGroup[t]
+            list.sort(sortBy('entropy', false, parseFloat));
+            for (let i=0; i < list.length; i++) {
+                data_dict[list[i]['id']]['entropyByGroup_rank'] = i
+            }
+        }
+        uncertaintyAll.sort(sortBy('entropy', false, parseFloat));
+        for (let i=0; i < uncertaintyAll.length; i++) {
+            uncertaintyAll[i]['rank'] = i
+            data_dict[uncertaintyAll[i]['id']]['entropyAll_rank'] = i
+        }
+
+
+
+        // console.log(data_list)
+        // console.log(prob_Class)
+        var scatter
+
+        var zoomState = null
+        var ZoomEnable = true
+        var lassoSelectedDocs_id = []
+        var Append_mode = false
+
+        var rank_mode = 'global'
+
+        let radius_normal = 7
+        let radius_selected = 8
+        let strokeWidth_labled = parseInt(radius_normal/3)
+        let color_default = "#69b3a2"
+        let color_selected = "#EC888C"
+        let color_target = "red"
+        let color_before_mouseover = null
+        let radius_before_mouseover = null
+
+        let bb = document.querySelector('#scatterPlot')
+            .getBoundingClientRect()
+        let shape = {
+            innerwidth: bb.right - bb.left,
+            innerheight: 0
+        }
+        shape.innerheight = 6 * shape.innerwidth
+        let margin = {
+            left: 20,
+            top: 10,
+            right: 10,
+            bottom: 20
+        }
+
+        renderDots()
+
+        function renderDots(){
+            $("#scatterPlot").empty();
+            var myColor = d3.scaleOrdinal()
+                .domain(["Hotels", "Restaurants", "Beauty & Spas", "Real Estate", "Airports", "Pets", "Doctors", "Auto Repair", "Lawyers"])
+                .range(["#a6cee3", "#1f78b4", "#b2df8a", "#33a02c", "#fb9a99", "#e31a1c", "#fdbf6f", "#ff7f00", "#cab2d6", "#6a3d9a", "#ffff99", "#b15928"])
+            myColor = d3.scaleOrdinal(d3.schemeCategory10)
+
+            let svg_scatterPlot = d3.select('#scatterPlot')
+                .append('svg')
+                .attr("viewBox", [0, 0, shape.innerwidth, shape.innerheight])
+
+            var clip = svg_scatterPlot.append("defs")
+                .append("SVG:clipPath")
+                .attr("id", "clip")
+                .append("SVG:rect")
+                .attr("width", shape.innerwidth)
+                .attr("height", shape.innerheight)
+                .attr("x", 0)
+                .attr("y", 0);
+
+            scatter = svg_scatterPlot.append('g')
+                .attr("clip-path", "url(#clip)")
+            
+            let all_dots = scatter.selectAll(".dot")
+                .data(data_list)
+                .enter()
+                .append("circle")
+                .attr("class", "dot")
+                .attr("id", function(d) {
+                    return "dot_" + d.index;
+                })
+                .attr("cx", function(d) {
+                    return assignCoords(d.index).x;
+                })
+                .attr("cy", function(d) {
+                    return assignCoords(d.index).y;
+                })
+                .attr("r", radius_normal)
+                .style("fill", d => assignColor(d.index))
+                .style("fill-opacity", d => assignOpacity(d.index))
+                .style("stroke", d => assignStroke(d.index))
+                .style("stroke-width", d => assignStrokeWidth(d.index))
+                // .on("mouseover", handleMouseOver)
+                // .on("mouseout", handleMouseOut)
+                .on("click", function(d) {
+                    let indexOfSelectedDoc_t = indexOfSelectedDoc
+                    indexOfSelectedDoc = d.index
+                    d3.select('#dot_' + indexOfSelectedDoc_t).style("fill", d => assignColor(d.index))
+                    d3.select('#dot_' + indexOfSelectedDoc).style("fill", color_target)
+                    d3.select('#text_being_labeled')
+                        .text(data_dict[d.index]['doc'])
+                });
+
+            
+            function assignColor(index) {
+                if (index == indexOfSelectedDoc) {
+                    return color_target
+                } else {
+                    if(data_dict[index]['isLabeled'] == 1){
+                        return myColor(labeledSet[index])
+                    }else{
+                        return myColor(data_dict[index]['predicted_cat'])
+                    }
+                }
+            }
+
+            function assignOpacity(index) {
+                if(data_dict[index]['isLabeled'] == 1){
+                    return 0.3
+                }else{
+                    return 0.8
+                }
+            }
+
+            function assignStroke(index) {
+                if(data_dict[index]['isLabeled'] == 1){
+                    return myColor(labeledSet[index])
+                }else{
+                    return myColor(data_dict[index]['predicted_cat'])
+                }
+                
+            }
+            function assignStrokeWidth(index) {
+                if(data_dict[index]['isLabeled'] == 1){
+                    return strokeWidth_labled
+                }else{
+                    return 1
+                }
+                
+            }
+            function assignCoords(id) {
+                if (rank_mode == 'global'){
+                    return assignCoords_global(id)
+                }else{
+                    return assignCoords_group(id)
+                }
+            }
+
+            function assignCoords_group(id) {
+                let cat_rank = {"Hotels": 0, "Restaurants": 1, "Beauty & Spas": 2, "Real Estate": 3, "Airports": 4, "Pets": 5, "Doctors": 6, "Auto Repair": 7, "Lawyers": 8}
+                let inner_margin_row = 3
+                let inner_margin_col = 3
+                let group_margin = 10
+                let maxcap_row = parseInt((shape.innerwidth - 2 * radius_normal - 10 - 2*inner_margin_row ) / (2*radius_normal + inner_margin_row ))
+                let numOfCat = 9
+                let maxcap_col = parseInt((shape.innerheight - 2 * radius_normal - 10 - group_margin*numOfCat) / (2*radius_normal + inner_margin_col))
+                let max_perCat = parseInt(maxcap_col/numOfCat) * maxcap_row
+                let height_perCat = group_margin + parseInt(maxcap_col/numOfCat) * (2*radius_normal + inner_margin_col)
+                
+                let group_order = cat_rank[data_dict[id]['predicted_cat']]
+                
+                let rank = data_dict[id]['entropyByGroup_rank']
+
+                if(rank >= max_perCat ){
+                    rank = max_perCat-1
+                }
+
+                let x = (inner_margin_row + (2*radius_normal)) * (rank % maxcap_row) + radius_normal + 10
+                let y = parseInt(rank / maxcap_row) * (inner_margin_col + (2*radius_normal)) + group_order * height_perCat + radius_normal + 10
+
+                return {'x':x, 'y':y}
+            }
+            function assignCoords_global(id) {
+                let cat_rank = {"Hotels": 0, "Restaurants": 1, "Beauty & Spas": 2, "Real Estate": 3, "Airports": 4, "Pets": 5, "Doctors": 6, "Auto Repair": 7, "Lawyers": 8}
+                let inner_margin_row = 3
+                let inner_margin_col = 3
+                let group_margin = 10
+                let maxcap_row = parseInt((shape.innerwidth - 2 * radius_normal - 10 - 2*inner_margin_row ) / (2*radius_normal + inner_margin_row ))
+                let numOfCat = 1
+                let maxcap_col = parseInt((shape.innerheight - 2 * radius_normal - 10 - group_margin*numOfCat) / (2*radius_normal + inner_margin_col))
+                let max_perCat = parseInt(maxcap_col/numOfCat) * maxcap_row
+                let height_perCat = group_margin + parseInt(maxcap_col/numOfCat) * (2*radius_normal + inner_margin_col)
+                
+                let group_order = 0
+                
+                let rank = data_dict[id]['entropyAll_rank']
+
+                if(rank >= max_perCat ){
+                    rank = max_perCat-1
+                }
+
+                let x = (inner_margin_row + (2*radius_normal)) * (rank % maxcap_row) + radius_normal + 10
+                let y = parseInt(rank / maxcap_row) * (inner_margin_col + (2*radius_normal)) + group_order * height_perCat + radius_normal + 10
+
+                return {'x':x, 'y':y}
+            }
+        }
+
+        function dotTransition(){
+            
+            scatter.selectAll(".dot")
+                .data(data_list)
+                .transition()
+                .duration(3000)
+                .attr("cx", function(d) {
+                    return assignCoords(d.index).x;
+                })
+                .attr("cy", function(d) {
+                    return assignCoords(d.index).y;
+                })
+                function assignCoords(id) {
+                if (rank_mode == 'global'){
+                    return assignCoords_global(id)
+                }else{
+                    return assignCoords_group(id)
+                }
+            }
+
+            function assignCoords_group(id) {
+                let cat_rank = {"Hotels": 0, "Restaurants": 1, "Beauty & Spas": 2, "Real Estate": 3, "Airports": 4, "Pets": 5, "Doctors": 6, "Auto Repair": 7, "Lawyers": 8}
+                let inner_margin_row = 3
+                let inner_margin_col = 3
+                let group_margin = 10
+                let maxcap_row = parseInt((shape.innerwidth - 2 * radius_normal - 10 - 2*inner_margin_row ) / (2*radius_normal + inner_margin_row ))
+                let numOfCat = 9
+                let maxcap_col = parseInt((shape.innerheight - 2 * radius_normal - 10 - group_margin*numOfCat) / (2*radius_normal + inner_margin_col))
+                let max_perCat = parseInt(maxcap_col/numOfCat) * maxcap_row
+                let height_perCat = group_margin + parseInt(maxcap_col/numOfCat) * (2*radius_normal + inner_margin_col)
+                
+                let group_order = cat_rank[data_dict[id]['predicted_cat']]
+                
+                let rank = data_dict[id]['entropyByGroup_rank']
+
+                if(rank >= max_perCat ){
+                    rank = max_perCat-1
+                }
+
+                let x = (inner_margin_row + (2*radius_normal)) * (rank % maxcap_row) + radius_normal + 10
+                let y = parseInt(rank / maxcap_row) * (inner_margin_col + (2*radius_normal)) + group_order * height_perCat + radius_normal + 10
+
+                return {'x':x, 'y':y}
+            }
+            function assignCoords_global(id) {
+                let cat_rank = {"Hotels": 0, "Restaurants": 1, "Beauty & Spas": 2, "Real Estate": 3, "Airports": 4, "Pets": 5, "Doctors": 6, "Auto Repair": 7, "Lawyers": 8}
+                let inner_margin_row = 3
+                let inner_margin_col = 3
+                let group_margin = 10
+                let maxcap_row = parseInt((shape.innerwidth - 2 * radius_normal - 10 - 2*inner_margin_row ) / (2*radius_normal + inner_margin_row ))
+                let numOfCat = 1
+                let maxcap_col = parseInt((shape.innerheight - 2 * radius_normal - 10 - group_margin*numOfCat) / (2*radius_normal + inner_margin_col))
+                let max_perCat = parseInt(maxcap_col/numOfCat) * maxcap_row
+                let height_perCat = group_margin + parseInt(maxcap_col/numOfCat) * (2*radius_normal + inner_margin_col)
+                
+                let group_order = 0
+                
+                let rank = data_dict[id]['entropyAll_rank']
+
+                if(rank >= max_perCat ){
+                    rank = max_perCat-1
+                }
+
+                let x = (inner_margin_row + (2*radius_normal)) * (rank % maxcap_row) + radius_normal + 10
+                let y = parseInt(rank / maxcap_row) * (inner_margin_col + (2*radius_normal)) + group_order * height_perCat + radius_normal + 10
+
+                return {'x':x, 'y':y}
+            }
+        }
+
+        $(document).ready(function() {
+            $("#next_doc_button").click(function() {
+                label_input = $('input:radio:checked').val()
+                var data = {
+                    "label_input": label_input,
+                    "query_instance_id": query_instance_id
+                };
+                jQuery.get("{% url 'engine:randomSampling' %}", data, function(ret) {
+                    var next_instance = JSON.parse(ret['next_instance'])
+                    query_instance_id = JSON.parse(ret['next_instance_id'])
+                    d3.select('#text_being_labeled')
+                        .text(next_instance['doc'])
+                })
+            })
+            $("#label_doc_button").click(function() {
+                label_input = $('input:radio:checked').val()
+                var data = {
+                    "label_input": label_input,
+                    "query_instance_id": indexOfSelectedDoc
+                };
+
+                //有点问题
+                data_dict[indexOfSelectedDoc].isLabeled = 1
+                d3.select("#dot_" + indexOfSelectedDoc).style("fill", "grey")
+                jQuery.get("{% url 'engine:labelSingleDoc' %}", data, function(ret) {
+
+                })
+            })
+            $("#saveToFile").click(function() {
+                var data = {};
+                jQuery.get("{% url 'engine:saveLabledDataToFile' %}", data, function(ret) {
+
+                })
+            })
+            $("#global_rank").click(function() {
+                rank_mode = "global"
+                dotTransition()
+            })
+            $("#group_rank").click(function() {
+                rank_mode = "group"
+                dotTransition()
+            })
+
+
+            document.addEventListener('keydown', keyEvent);
+
+            function keyEvent(event) {
+                if (event.key == 'Control') {
+                    if (ZoomEnable) {
+                        ZoomEnable = false
+                        renderScatterPlot()
+                    } else {
+                        ZoomEnable = true
+                        renderScatterPlot()
+                    }
+                }
+                if (event.key == 'a') {
+                    if (Append_mode) {
+                        Append_mode = false
+                    } else {
+                        Append_mode = true
+                    }
+                }
+            }
+        })
+    </script>
+    <!-- <script src="{%static 'index.js' %}"></script> -->
+  </body>
+</html>
