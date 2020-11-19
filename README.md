@@ -1,6 +1,3 @@
-# dataLabeling
-A visual interactive data labeling system
-
 # Installing Instruction
 ## 1. Setup python virtual enviroment
 ### Install pyenv.
