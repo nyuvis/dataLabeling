@@ -24,4 +24,4 @@ sklearn==0.0
 smart-open==2.1.1
 sqlparse==0.3.1
 threadpoolctl==2.1.0
-urllib3==1.25.10
+urllib3==1.26.5
